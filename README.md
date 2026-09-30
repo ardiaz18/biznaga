@@ -7,5 +7,5 @@ Repos de trabajo de La Biznaga Digital. Cada carpeta corresponde a un proyecto d
 | Carpeta | Descripción |
 |---|---|
 | [nuevo-menu-taller](nuevo-menu-taller/) | Prototipo de nuevo menú para Taller del Tote Bag |
-| [taller-totebag](taller-totebag/) | Página de migración para tallerdeltotebag.es |
-| [formacion](formacion/) | Material de formación interno |
+| [taller-totebag](taller-totebag/) | Primera propuesta arquitectura de menú para tallerdeltotebag.es |
+| [formacion](formacion/) | Vertical formación para Irene San Linos |
