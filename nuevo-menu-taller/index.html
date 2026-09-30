@@ -1,0 +1,111 @@
+<style>
+.mw{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+.mw-eyebrow{font-size:10px;font-weight:700;letter-spacing:.07em;color:#888780;text-transform:uppercase;margin:0 0 8px}
+.mw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:24px}
+.mw-tab{background:#F1EFE8;border:1px solid #D3D1C7;border-radius:12px;padding:12px}
+.mw-tab-label{font-size:13px;font-weight:700;color:#2C2C2A;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mw-hub{background:#FFFFFF;border:1px solid #D3D1C7;border-radius:8px;padding:9px 10px;margin-bottom:6px}
+.mw-hub:last-child{margin-bottom:0}
+.mw-hub-name{font-size:12px;font-weight:700;color:#2C2C2A;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mw-hub-url{font-family:'Courier New',monospace;font-size:10px;color:#534AB7;margin-top:2px}
+.mw-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px}
+.mw-tag.ok{background:#E1F5EE;color:#0F6E56}
+.mw-tag.new{background:#FAEEDA;color:#854F0B}
+.mw-tag.label{background:#EEEDFE;color:#534AB7}
+.mw-child{display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:4px 0 4px 12px;border-left:2px solid #AFA9EC;margin-top:6px}
+.mw-child-name{color:#5F5E5A;font-weight:500}
+.mw-child-url{font-family:'Courier New',monospace;font-size:10px;color:#888780;white-space:nowrap}
+.mw-footer{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.mw-foot-card{background:#FFFFFF;border:1px solid #D3D1C7;border-radius:8px;padding:9px 10px}
+</style>
+<div class="mw">
+
+<div class="mw-eyebrow">Home</div>
+<div class="mw-grid" style="grid-template-columns:140px;margin-bottom:20px">
+  <div class="mw-tab"><div class="mw-tab-label">Home</div><div class="mw-hub-url" style="color:#888780">/</div></div>
+</div>
+
+<div class="mw-eyebrow">Menú principal — 6 pestañas</div>
+<div class="mw-grid">
+
+  <div class="mw-tab">
+    <div class="mw-tab-label">Totebags <span class="mw-tag ok">hub propio</span></div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Bolsas personalizadas</div>
+      <div class="mw-hub-url">/bolsas-personalizadas · 11 PDPs</div>
+      <div class="mw-child"><span class="mw-child-name">Bolsas de algodón</span><span class="mw-child-url">/bolsas-algodon</span></div>
+      <div class="mw-child"><span class="mw-child-name">Bolsas ecológicas</span><span class="mw-child-url">/bolsas-algodon-ecologico</span></div>
+      <div class="mw-child"><span class="mw-child-name">Para bodas</span><span class="mw-child-url">/bolsas-bodas</span></div>
+      <div class="mw-child"><span class="mw-child-name">Para comuniones</span><span class="mw-child-url">/bolsas-comuniones</span></div>
+      <div class="mw-child"><span class="mw-child-name">Para bautizos</span><span class="mw-child-url">/bolsas-bautizos</span></div>
+    </div>
+  </div>
+
+  <div class="mw-tab">
+    <div class="mw-tab-label">Shopping bags <span class="mw-tag label">solo etiqueta</span></div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Bolsas de compra <span class="mw-tag new">slug cambia</span></div>
+      <div class="mw-hub-url">/bolsas-compra · 12 PDPs en cascada</div>
+    </div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Bolsas de yute</div>
+      <div class="mw-hub-url">/bolsos-yute</div>
+    </div>
+  </div>
+
+  <div class="mw-tab">
+    <div class="mw-tab-label">Sacos y accesorios <span class="mw-tag label">solo etiqueta</span></div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Sacos de tela personalizados</div>
+      <div class="mw-hub-url">/sacos-tela-personalizados · 14 PDPs</div>
+      <div class="mw-child"><span class="mw-child-name">Saquitos de tela</span><span class="mw-child-url">/saquitos-tela</span></div>
+      <div class="mw-child"><span class="mw-child-name">Mochilas cuerdas</span><span class="mw-child-url">/mochilas-cuerdas-pers.</span></div>
+    </div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Neceser personalizado <span class="mw-tag ok">hub independiente</span></div>
+      <div class="mw-hub-url">/neceser-personalizado · 9 PDPs</div>
+    </div>
+  </div>
+
+  <div class="mw-tab">
+    <div class="mw-tab-label">Ropa personalizada <span class="mw-tag label">solo etiqueta</span></div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Camisetas personalizadas</div>
+      <div class="mw-hub-url">/camisetas-personalizadas</div>
+      <div class="mw-child"><span class="mw-child-name">Hombre (noindex)</span><span class="mw-child-url">...-hombre</span></div>
+      <div class="mw-child"><span class="mw-child-name">Mujer (noindex)</span><span class="mw-child-url">...-mujer</span></div>
+      <div class="mw-child"><span class="mw-child-name">Niños</span><span class="mw-child-url">...-ninos</span></div>
+    </div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Gorras personalizadas <span class="mw-tag ok">hub independiente</span></div>
+      <div class="mw-hub-url">/gorras-personalizadas</div>
+    </div>
+  </div>
+
+  <div class="mw-tab">
+    <div class="mw-tab-label">Merchandising personalizado <span class="mw-tag ok">hub propio</span></div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Merchandising personalizado <span class="mw-tag new">slug cambia</span></div>
+      <div class="mw-hub-url">/merchandising-personalizado · ~9 PDPs</div>
+    </div>
+  </div>
+
+  <div class="mw-tab">
+    <div class="mw-tab-label">Fabricación europea <span class="mw-tag ok">hub propio</span></div>
+    <div class="mw-hub">
+      <div class="mw-hub-name">Fabricación europea</div>
+      <div class="mw-hub-url">/fabricacion-europea</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mw-eyebrow">Footer · landings B2B (fuera del menú principal)</div>
+<div class="mw-footer">
+  <div class="mw-foot-card"><div class="mw-hub-name">Mayorista tote bag</div><div class="mw-hub-url">/mayorista-tote-bag</div></div>
+  <div class="mw-foot-card"><div class="mw-hub-name">Tote bag empresas <span class="mw-tag new">nueva</span></div><div class="mw-hub-url">/tote-bag-para-empresas</div></div>
+  <div class="mw-foot-card"><div class="mw-hub-name">Bolsas al por mayor <span class="mw-tag new">nueva</span></div><div class="mw-hub-url">/bolsas-...-al-por-mayor</div></div>
+  <div class="mw-foot-card"><div class="mw-hub-name">Bolsas eventos <span class="mw-tag new">nueva</span></div><div class="mw-hub-url">/bolsas-...-eventos</div></div>
+</div>
+
+</div>

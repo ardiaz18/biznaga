@@ -1,0 +1,207 @@
+<style>
+:root{
+  --paper:#fffdf7;
+  --ink:#111111;
+  --muted:#5f5a50;
+  --line:#111111;
+  --green:#c8f169;
+  --yellow:#ffd166;
+  --red:#ff8f8f;
+  --blue:#8ecae6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ebe6d8;color:var(--ink);font-family:"Arial Narrow",Arial,Helvetica,sans-serif}
+.wrap{max-width:1160px;margin:0 auto;padding:26px 16px 40px;display:flex;flex-direction:column;gap:22px}
+.section-label{display:inline-block;margin:0 0 8px;background:#111;color:#fff;border:2px solid #111;box-shadow:4px 4px 0 #c5bda9;padding:7px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:0;overflow:hidden;box-shadow:8px 8px 0 #c5bda9}
+.data-table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}.data-table th{background:#111;color:#fff;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;padding:12px;border-bottom:2px solid #111;border-right:2px solid #111}.data-table th:last-child{border-right:0}.data-table td{padding:13px 12px;border-bottom:2px solid #111;border-right:2px solid #111;vertical-align:middle;line-height:1.38;background:#fffdf7}.data-table td:last-child{border-right:0}.data-table tr:last-child td{border-bottom:0}.data-table tbody tr:nth-child(even) td{background:#f5f0e5}.data-table tbody tr:hover td{background:#eef6ff}.data-table strong{font-weight:900}.data-table td:nth-child(2),td.kw{font-weight:900;color:#111;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}.impact{font-size:12px;color:#333}
+.badge,.p-tag{display:inline-flex;align-items:center;gap:5px;border:2px solid #111;box-shadow:3px 3px 0 #111;padding:4px 8px;font-size:11px;font-weight:900;white-space:nowrap}.badge-g,.p-now{background:var(--green);color:#111}.badge-a,.p-mid{background:var(--yellow);color:#111}.badge-r{background:var(--red);color:#111}
+.bar-wrap{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:900;color:#111}.bar-bg{width:62px;height:10px;background:#fff;border:2px solid #111;display:inline-block;overflow:hidden}.bar-fg{height:100%;background:#111}
+.callout,.callout-b{background:#fffdf7;border:2px solid #111;box-shadow:8px 8px 0 #c5bda9;padding:18px 20px;font-size:14px;color:#111;line-height:1.65}.callout{background:#fff1c2}.callout-b{background:#dff4ff}.callout strong,.callout-b strong{font-weight:900}
+.arch{display:flex;flex-direction:column;align-items:center;gap:0;background:#fffdf7;border:2px solid #111;box-shadow:8px 8px 0 #c5bda9;padding:24px 16px}.hub{width:min(370px,100%);background:#111;color:#fff;border:2px solid #111;padding:16px 20px;text-align:center;box-shadow:6px 6px 0 #8ecae6}.hub-t{font-size:16px;font-weight:900}.hub-sub{font-size:12px;margin-top:5px;line-height:1.45;color:#e9e9e9}.vline,.vline-sm{width:3px;background:#111}.vline{height:26px}.vline-sm{height:18px}.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:100%}.branch{display:flex;flex-direction:column;align-items:center}.pc{width:100%;min-height:142px;border:2px solid #111;box-shadow:5px 5px 0 #111;padding:14px 12px}.pc-green{background:var(--green)}.pc-amber{background:var(--yellow)}.pc-red{background:var(--red)}.pc-lbl{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;border-bottom:2px solid #111;padding-bottom:5px;margin-bottom:8px}.pc-lbl-g,.pc-lbl-a,.pc-lbl-r{color:#111}.pc-name{font-size:14px;font-weight:900;line-height:1.25;margin-bottom:7px}.pc-kw{font-size:12px;color:#111;line-height:1.35}.pc-vol{font-size:11px;color:#111;margin-top:9px;font-weight:900}
+.funnel-grid{display:grid;grid-template-columns:1fr 42px 1fr 42px 1fr;background:#fffdf7}.f-step{padding:21px 16px;text-align:left}.divider-v{border-right:2px solid #111}.f-arrow{display:grid;place-items:center;font-size:22px;font-weight:900;color:#111;background:#e5dfd1;border-right:2px solid #111}.f-num{width:40px;height:40px;border:2px solid #111;box-shadow:3px 3px 0 #111;display:grid;place-items:center;background:#8ecae6;color:#111;font-size:22px;font-weight:900;margin-bottom:12px}.funnel-grid>.f-step:nth-child(3) .f-num{background:#c8f169}.funnel-grid>.f-step:nth-child(5) .f-num{background:#ffd166}.f-lbl{font-size:13px;font-weight:900;text-transform:uppercase}.f-ex{font-size:12.5px;color:#111;margin-top:9px;line-height:1.55}
+@media(max-width:900px){.row,.funnel-grid{grid-template-columns:1fr}.f-arrow{display:none}.divider-v{border-right:0;border-bottom:2px solid #111}.data-table{table-layout:auto}}
+</style>
+
+<div class="wrap">
+<div>
+<div class="section-label">Keyword transaccional por producto</div>
+<div class="card">
+<table class="data-table">
+<thead>
+<tr>
+<th style="width:26%">Producto</th>
+<th style="width:26%">Keyword transaccional</th>
+<th style="width:9%">Vol</th>
+<th style="width:14%">KD</th>
+<th>Página viable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Curso autoestima</strong></td>
+<td>curso de autoestima</td>
+<td><strong>70</strong></td>
+<td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:5%"></div></div><span>5</span></div></td>
+<td><span class="badge badge-g"><i aria-hidden="true" class="ti ti-check"></i>Landing transaccional</span></td>
+</tr>
+<tr>
+<td><strong>Superar ruptura</strong></td>
+<td>sin keyword transaccional</td>
+<td>—</td>
+<td>—</td>
+<td><span class="badge badge-a">Blog + landing sin SEO</span></td>
+</tr>
+<tr>
+<td><strong>Equilibrio Bajo Presión</strong></td>
+<td>burnout tratamiento <span>(blog)</span></td>
+<td><strong>210</strong></td>
+<td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:6%"></div></div><span>6</span></div></td>
+<td><span class="badge badge-a">Blog → landing</span></td>
+</tr>
+<tr>
+<td><strong>Claridad para Decidir</strong></td>
+<td>tomar decisiones difíciles <span>(blog)</span></td>
+<td><strong>90</strong></td>
+<td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:11%"></div></div><span>11</span></div></td>
+<td><span class="badge badge-a">Blog → landing</span></td>
+</tr>
+<tr>
+<td><strong>Acompañamiento judicial</strong></td>
+<td>sin datos</td>
+<td>—</td>
+<td>—</td>
+<td><span class="badge badge-r">Tráfico referido</span></td>
+</tr>
+<tr>
+<td><strong>Liderazgo Interior</strong></td>
+<td>sin datos</td>
+<td>—</td>
+<td>—</td>
+<td><span class="badge badge-r">Social / awareness</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="callout">
+<strong>El problema con los programas de 790 €:</strong> el paciente que los necesita no busca el programa, busca su problema. Nadie googlea "programa psicológico para tomar decisiones". Busca "no sé qué decisión tomar" o "burnout tratamiento". Esas son keywords informacionales — se resuelven desde el blog, no desde la landing. La landing existe para <em>convertir</em>, no para atraer tráfico.
+</div>
+<div>
+<div class="section-label">Arquitectura recomendada</div>
+<div class="arch">
+<div class="hub">
+<div class="hub-t">/formacion.html · Hub</div>
+<div class="hub-sub">"cursos de psicología online" · navegación + autoridad interna</div>
+</div>
+<div class="vline"></div>
+<div class="row">
+<div class="branch">
+<div class="vline-sm"></div>
+<div class="pc pc-green">
+<div class="pc-lbl pc-lbl-g">Landing transaccional</div>
+<div class="pc-name">Libera tu Autoestima</div>
+<div class="pc-kw">"curso de autoestima"</div>
+<div class="pc-vol">70 vol · KD 5</div>
+</div>
+</div>
+<div class="branch">
+<div class="vline-sm"></div>
+<div class="pc pc-amber">
+<div class="pc-lbl pc-lbl-a">Sin SEO directo</div>
+<div class="pc-name">Superar la Ruptura</div>
+<div class="pc-kw">Sin keyword transaccional</div>
+<div class="pc-vol">Tráfico desde blog</div>
+</div>
+</div>
+<div class="branch">
+<div class="vline-sm"></div>
+<div class="pc pc-amber">
+<div class="pc-lbl pc-lbl-a">Entrada desde blog</div>
+<div class="pc-name">Equilibrio Bajo Presión</div>
+<div class="pc-kw">"burnout tratamiento"</div>
+<div class="pc-vol">210 vol · KD 6</div>
+</div>
+</div>
+<div class="branch">
+<div class="vline-sm"></div>
+<div class="pc pc-amber">
+<div class="pc-lbl pc-lbl-a">Entrada desde blog</div>
+<div class="pc-name">Claridad para Decidir</div>
+<div class="pc-kw">"tomar decisiones difíciles"</div>
+<div class="pc-vol">90 vol · KD 11</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="section-label">Cómo llega el paciente · el embudo real</div>
+<div class="card">
+<div class="funnel-grid">
+<div class="f-step divider-v">
+<div class="f-num">1</div>
+<div class="f-lbl">Blog informacional</div>
+<div class="f-ex">"burnout tratamiento" (210/mes)<br/>"tomar decisiones difíciles" (90/mes)<br/>"mejorar autoestima" (320/mes)</div>
+</div>
+<div class="f-arrow">→</div>
+<div class="f-step divider-v">
+<div class="f-num">2</div>
+<div class="f-lbl">Hub /formacion.html</div>
+<div class="f-ex">Descubre el catálogo. CTA a cada landing.</div>
+</div>
+<div class="f-arrow">→</div>
+<div class="f-step">
+<div class="f-num">3</div>
+<div class="f-lbl">Landing transaccional</div>
+<div class="f-ex">Convierte. No necesita tráfico orgánico propio.</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-b">
+  Con landings propias por producto, el hub <strong>deja de necesitar una keyword transaccional</strong>. Su función es pasar autoridad SEO hacia abajo y facilitar la navegación al usuario que llega desde el blog sin saber qué producto necesita. La mejor opción disponible es <strong>"cursos de psicología online"</strong> (40–150 vol, KD 55) — pero ese ranking llegará después de que las landings ganen autoridad y la pasen al hub.
+</div>
+<div>
+<div class="section-label">Plan de acción · qué construir primero</div>
+<div class="card">
+<table class="data-table">
+<thead>
+<tr><th style="width:14%">Prioridad</th><th style="width:30%">Qué crear</th><th style="width:28%">Keyword objetivo</th><th>Impacto SEO</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="p-tag p-now">1 · Inmediato</span></td>
+<td>Landing /curso-autoestima</td>
+<td class="kw">"curso de autoestima"</td>
+<td class="impact">Tráfico directo · KD 5</td>
+</tr>
+<tr>
+<td><span class="p-tag p-now">2 · Inmediato</span></td>
+<td>Artículo blog burnout</td>
+<td class="kw">"burnout tratamiento"</td>
+<td class="impact">210 vol · KD 6 → alimenta Equilibrio</td>
+</tr>
+<tr>
+<td><span class="p-tag p-now">3 · Inmediato</span></td>
+<td>Artículo blog autoestima</td>
+<td class="kw">"mejorar autoestima"</td>
+<td class="impact">320–210 vol → alimenta curso</td>
+</tr>
+<tr>
+<td><span class="p-tag p-mid">4 · Medio plazo</span></td>
+<td>Artículo blog ruptura</td>
+<td class="kw">"cómo superar una ruptura"</td>
+<td class="impact">Estacional → alimenta curso ruptura</td>
+</tr>
+<tr>
+<td><span class="p-tag p-mid">5 · Medio plazo</span></td>
+<td>Optimizar /formacion.html como hub</td>
+<td class="kw">"cursos de psicología online"</td>
+<td class="impact">Heredará autoridad de las landings</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>

@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arquitectura SEO & KW Research — Taller del Totebag</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;line-height:1.7;color:#2c2c2a;max-width:980px;margin:0 auto;padding:2rem 1.5rem;background:#fff}
+  h1{font-size:21px;font-weight:700;margin:0 0 0.2rem}
+  h2{font-size:15px;font-weight:700;margin:3rem 0 1rem;border-left:3px solid #534AB7;padding-left:12px;color:#1a1a18}
+  h3{font-size:12px;font-weight:700;color:#3C3489;margin:1.5rem 0 0.5rem;text-transform:uppercase;letter-spacing:0.05em}
+  p{margin:0.5rem 0}
+  ul{margin:0.3rem 0;padding-left:1.4rem}
+  li{margin:0.15rem 0}
+  code{font-family:'Courier New',monospace;font-size:12px;background:#F1EFE8;border-radius:3px;padding:1px 5px;color:#3C3489}
+  hr{border:none;border-top:1px solid #E8E6E0;margin:2.5rem 0}
+  .meta{font-size:12px;color:#888780;margin:0 0 2.5rem}
+  .badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:8px;white-space:nowrap}
+  .ok{background:#EAF3DE;color:#3B6D11;border:1px solid #97C459}
+  .warn{background:#FAEEDA;color:#633806;border:1px solid #EF9F27}
+  .crit{background:#FCEBEB;color:#A32D2D;border:1px solid #E24B4A}
+  .noindex{background:#F1EFE8;color:#5F5E5A;border:1px solid #D3D1C7}
+  .redirect{background:#E6F1FB;color:#0C447C;border:1px solid #85B7EB}
+  .newpage{background:#EEEDFE;color:#3C3489;border:1px solid #7F77DD}
+  .alert{border-left:4px solid #E24B4A;background:#FCEBEB;padding:0.9rem 1.1rem;border-radius:0 6px 6px 0;margin:0.75rem 0;font-size:13px;color:#501313}
+  .alert strong{color:#A32D2D;display:block;margin-bottom:3px}
+  .info-box{border-left:3px solid #534AB7;background:#EEEDFE;padding:0.7rem 1rem;border-radius:0 4px 4px 0;margin:0.75rem 0;font-size:13px;color:#26215C}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:0.75rem 0}
+  th{background:#534AB7;color:#EEEDFE;padding:7px 10px;text-align:left;font-weight:600;font-size:11.5px}
+  td{padding:6px 10px;border-bottom:1px solid #EDEAE2;vertical-align:top}
+  tr:nth-child(even) td{background:#F9F8F5}
+  tr:last-child td{border-bottom:none}
+  .url{font-family:monospace;font-size:11px;color:#3C3489}
+  .vol-hi{font-weight:700;color:#3B6D11}
+  .vol-mid{font-weight:700;color:#854F0B}
+  .vol-low{font-weight:700;color:#888780}
+  .pdp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.35rem;margin:0.75rem 0}
+  .pdp-card{background:#F9F8F5;border:1px solid #E8E6E0;border-radius:4px;padding:5px 9px;font-size:12px}
+  .pdp-card .name{font-weight:600;color:#1a1a18;display:block}
+  .pdp-card .slug{font-family:monospace;font-size:10.5px;color:#888780}
+  .pdp-card .gram{font-size:10.5px;color:#534AB7}
+  .pdp-card.old{border-color:#E24B4A;background:#FFF8F7}
+  .pdp-card.unknown{opacity:0.5}
+  svg{display:block;width:100%;max-width:900px;margin:0 auto}
+
+  /* ── PASSWORD GATE ── */
+  #gate{
+    position:fixed;inset:0;z-index:9999;
+    background:#f8f7f5;
+    display:flex;align-items:center;justify-content:center;
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  #gate-card{
+    background:#fff;border-radius:16px;
+    padding:2.5rem 2rem;width:100%;max-width:360px;
+    box-shadow:0 4px 32px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+    text-align:center;
+  }
+  #gate-icon{
+    width:52px;height:52px;border-radius:14px;background:#534AB7;
+    margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;
+  }
+  #gate-title{font-size:17px;font-weight:700;color:#1a1a18;margin:0 0 0.25rem}
+  #gate-sub{font-size:13px;color:#888780;margin:0 0 1.75rem}
+  #gate-input{
+    width:100%;border:1.5px solid #D3D1C7;border-radius:8px;
+    padding:0.65rem 0.9rem;font-size:14px;color:#2c2c2a;
+    outline:none;transition:border-color 0.15s;
+    font-family:inherit;
+  }
+  #gate-input:focus{border-color:#534AB7;}
+  #gate-input.shake{animation:shake 0.35s ease}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-6px)}
+    40%{transform:translateX(6px)}
+    60%{transform:translateX(-4px)}
+    80%{transform:translateX(4px)}
+  }
+  #gate-btn{
+    width:100%;margin-top:0.75rem;padding:0.7rem;
+    background:#534AB7;color:#fff;border:none;border-radius:8px;
+    font-size:14px;font-weight:600;cursor:pointer;
+    font-family:inherit;transition:background 0.15s;
+  }
+  #gate-btn:hover{background:#3C3489}
+  #gate-btn:active{background:#26215C}
+  #gate-err{
+    font-size:12.5px;color:#A32D2D;margin-top:0.75rem;
+    min-height:18px;display:none;
+  }
+  #gate-footer{font-size:11px;color:#B4B2A9;margin-top:2rem}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     PASSWORD GATE
+     Contraseña: totebag2026
+     Para cambiarla: busca 'totebag2026' en este archivo y sustitúyela.
+     ══════════════════════════════════════════════ -->
+<div id="gate">
+  <div id="gate-card">
+    <div id="gate-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <p id="gate-title">Documento confidencial</p>
+    <p id="gate-sub">Taller del Totebag · Arquitectura SEO 2026<br>Introduce la contraseña para continuar</p>
+    <input id="gate-input" type="password" placeholder="Contraseña" autocomplete="current-password" autofocus/>
+    <button id="gate-btn" onclick="gateCheck()">Acceder</button>
+    <p id="gate-err">Contraseña incorrecta. Inténtalo de nuevo.</p>
+    <p id="gate-footer">Este documento es confidencial y está destinado<br>exclusivamente a su destinatario.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     CONTENIDO DEL DOCUMENTO
+     ══════════════════════════════════════════════ -->
+
+<h1>Arquitectura SEO & Keyword Research</h1>
+<p class="meta">Taller del Totebag · tallerdeltotebag.es · Junio 2026 · Basado en: crawl directo de la web, versión francesa (latelierdutotebag.com), CSVs de KW assignment v1 y v2, Menú v1 y v2</p>
+
+<h2>0. Problemas críticos</h2>
+<div class="alert"><strong> Bug en producción — OG image apunta a localhost:8000</strong>Confirmado en el crawl. Todas las páginas muestran <code>og:image: http://localhost:8000/static/…</code>. Cero visibilidad al compartir en LinkedIn, WhatsApp o Facebook. Corregir antes de cualquier otro despliegue.</div>
+<div class="alert"><strong> URL fantasma activa — /bolsas-personalizadas-algodon-biologico</strong>Accesible en producción pero con canonical a <code>/bolsas-algodon-ecologico</code> sin redirect real. Google la rastrea y gasta crawl budget. Acción: <strong>301 redirect</strong>, no canonical.</div>
+<div class="alert"><strong> Thin content — /bolsas-algodon-ecologico tiene 1 solo producto</strong>Solo aparece <em>Bolsa Clásica Bio 140g</em>. Todos los productos GOTS deben asignarse a esta categoría en el CMS.</div>
+<div class="alert"><strong> PDPs de gorras en URL antigua activa</strong>Los únicos PDPs de gorras siguen en <code>/comprar-producto/accesorios/gorra-5-paneles/</code> y <code>/gorra-de-malla-panel-frontal/</code>. No tienen URL bajo el slug nuevo <code>/gorras-personalizadas/</code>.</div>
+<div class="alert"><strong>⚠ Contenido duplicado hub / subcategoría</strong><code>/bolsas-personalizadas</code> y <code>/bolsas-algodon</code> listan los mismos 11 productos. Requiere diferenciar el catálogo en el CMS.</div>
+<hr>
+
+<h2>1. PLP vs atributo</h2>
+<svg viewBox="0 0 900 310" style="max-width:900px">
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+  <rect x="10" y="10" width="380" height="160" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
+  <rect x="10" y="10" width="380" height="36" rx="8" fill="#534AB7"/>
+  <rect x="10" y="38" width="380" height="8" fill="#534AB7"/>
+  <text x="200" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#EEEDFE" font-family="system-ui,sans-serif">PLP — Página de listado indexada</text>
+  <text x="26" y="66" font-size="12" fill="#26215C" font-family="system-ui,sans-serif">✓  Tiene URL propia e indexada</text>
+  <text x="26" y="86" font-size="12" fill="#26215C" font-family="system-ui,sans-serif">✓  Aparece en el menú de navegación</text>
+  <text x="26" y="106" font-size="12" fill="#26215C" font-family="system-ui,sans-serif">✓  H1 propio + contenido diferenciado</text>
+  <text x="26" y="126" font-size="12" fill="#26215C" font-family="system-ui,sans-serif">✓  Keyword con intención de búsqueda propia</text>
+  <text x="26" y="146" font-size="12" fill="#26215C" font-family="system-ui,sans-serif">✓  Los usuarios la buscan como categoría</text>
+  <rect x="510" y="10" width="380" height="160" rx="8" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1.5"/>
+  <rect x="510" y="10" width="380" height="36" rx="8" fill="#888780"/>
+  <rect x="510" y="38" width="380" height="8" fill="#888780"/>
+  <text x="700" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Atributo / Filtro — sin URL indexada</text>
+  <text x="526" y="66" font-size="12" fill="#444441" font-family="system-ui,sans-serif">✗  Sin URL separada (o noindex si existe)</text>
+  <text x="526" y="86" font-size="12" fill="#444441" font-family="system-ui,sans-serif">✗  No aparece en el menú principal</text>
+  <text x="526" y="106" font-size="12" fill="#444441" font-family="system-ui,sans-serif">✗  Es un selector dentro de la PLP padre</text>
+  <text x="526" y="126" font-size="12" fill="#444441" font-family="system-ui,sans-serif">✗  Sin intent de búsqueda diferenciado</text>
+  <text x="526" y="146" font-size="12" fill="#444441" font-family="system-ui,sans-serif">✗  Los usuarios filtran, no navegan a ella</text>
+  <text x="450" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#534AB7" font-family="system-ui,sans-serif">→</text>
+  <text x="10" y="195" font-size="11" font-weight="700" fill="#534AB7" font-family="system-ui,sans-serif">EJEMPLOS PLP ✓</text>
+  <text x="510" y="195" font-size="11" font-weight="700" fill="#888780" font-family="system-ui,sans-serif">EJEMPLOS ATRIBUTO ✗</text>
+  <rect x="10" y="200" width="172" height="26" rx="4" fill="#EAF3DE" stroke="#97C459" stroke-width="0.5"/>
+  <text x="96" y="217" text-anchor="middle" font-size="11" fill="#3B6D11" font-family="system-ui,sans-serif">/bolsas-algodon [material específico]</text>
+  <rect x="196" y="200" width="172" height="26" rx="4" fill="#EAF3DE" stroke="#97C459" stroke-width="0.5"/>
+  <text x="282" y="217" text-anchor="middle" font-size="11" fill="#3B6D11" font-family="system-ui,sans-serif">/bolsas-bodas [ocasión específica]</text>
+  <rect x="10" y="232" width="172" height="26" rx="4" fill="#EAF3DE" stroke="#97C459" stroke-width="0.5"/>
+  <text x="96" y="249" text-anchor="middle" font-size="11" fill="#3B6D11" font-family="system-ui,sans-serif">/gorras-personalizadas [producto distinto]</text>
+  <rect x="196" y="232" width="172" height="26" rx="4" fill="#EAF3DE" stroke="#97C459" stroke-width="0.5"/>
+  <text x="282" y="249" text-anchor="middle" font-size="11" fill="#3B6D11" font-family="system-ui,sans-serif">/camisetas-ninos [público diferente]</text>
+  <rect x="510" y="200" width="168" height="26" rx="4" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="4 2"/>
+  <text x="594" y="217" text-anchor="middle" font-size="11" fill="#888780" font-family="system-ui,sans-serif">/camisetas-hombre [mismo intent]</text>
+  <rect x="692" y="200" width="168" height="26" rx="4" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="4 2"/>
+  <text x="776" y="217" text-anchor="middle" font-size="11" fill="#888780" font-family="system-ui,sans-serif">Por gramaje (140g, 220g…)</text>
+  <rect x="510" y="232" width="168" height="26" rx="4" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="4 2"/>
+  <text x="594" y="249" text-anchor="middle" font-size="11" fill="#888780" font-family="system-ui,sans-serif">Por color (natural, negro…)</text>
+  <rect x="692" y="232" width="168" height="26" rx="4" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="4 2"/>
+  <text x="776" y="249" text-anchor="middle" font-size="11" fill="#888780" font-family="system-ui,sans-serif">Asa larga / asa corta</text>
+  <rect x="140" y="272" width="620" height="30" rx="6" fill="#F9F8F5" stroke="#D3D1C7" stroke-width="1"/>
+  <text x="450" y="292" text-anchor="middle" font-size="12" font-weight="700" fill="#2c2c2a" font-family="system-ui,sans-serif">Regla clave: ¿Tiene esta KW un intent de búsqueda DISTINTO al de su categoría padre? → SÍ = PLP  |  NO = Atributo</text>
+</svg>
+<hr>
+
+<h2>2. Organigrama de la nueva arquitectura</h2>
+<p>Estructura completa basada en las URLs existentes en la web española. Las páginas nuevas están marcadas como <span class="badge newpage">NUEVA</span>. Los filtros se muestran en gris.</p>
+<svg viewBox="0 0 900 465" style="max-width:900px">
+  <rect x="360" y="14" width="180" height="36" rx="6" fill="#2c2c2a"/>
+  <text x="450" y="36" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">HOME  /</text>
+  <line x1="450" y1="50" x2="450" y2="68" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="80" y1="68" x2="820" y2="68" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="80" y1="68" x2="80" y2="84" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="228" y1="68" x2="228" y2="84" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="376" y1="68" x2="376" y2="84" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="524" y1="68" x2="524" y2="84" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="672" y1="68" x2="672" y2="84" stroke="#D3D1C7" stroke-width="1.5"/>
+  <line x1="820" y1="68" x2="820" y2="84" stroke="#D3D1C7" stroke-width="1.5"/>
+  <rect x="10" y="84" width="140" height="52" rx="6" fill="#534AB7" stroke="#3C3489" stroke-width="0.5"/>
+  <text x="80" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="#EEEDFE" font-family="system-ui,sans-serif">TOTEBAGS</text>
+  <text x="80" y="120" text-anchor="middle" font-size="10" fill="#AFA9EC" font-family="monospace">/bolsas-personalizadas</text>
+  <rect x="12" y="150" width="136" height="28" rx="3" fill="#fff" stroke="#534AB7" stroke-width="1.5"/>
+  <line x1="12" y1="150" x2="12" y2="178" stroke="#534AB7" stroke-width="3"/>
+  <text x="84" y="168" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Bolsas de algodón</text>
+  <rect x="12" y="184" width="136" height="28" rx="3" fill="#fff" stroke="#534AB7" stroke-width="0.5"/>
+  <line x1="12" y1="184" x2="12" y2="212" stroke="#534AB7" stroke-width="3"/>
+  <text x="84" y="202" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Bolsas bio/ecológicas ⚠</text>
+  <rect x="12" y="218" width="136" height="28" rx="3" fill="#fff" stroke="#534AB7" stroke-width="0.5"/>
+  <line x1="12" y1="218" x2="12" y2="246" stroke="#534AB7" stroke-width="3"/>
+  <text x="84" y="236" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Comuniones</text>
+  <rect x="12" y="252" width="136" height="28" rx="3" fill="#fff" stroke="#534AB7" stroke-width="0.5"/>
+  <line x1="12" y1="252" x2="12" y2="280" stroke="#534AB7" stroke-width="3"/>
+  <text x="84" y="270" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Bodas</text>
+  <rect x="12" y="286" width="136" height="28" rx="3" fill="#fff" stroke="#534AB7" stroke-width="0.5"/>
+  <line x1="12" y1="286" x2="12" y2="314" stroke="#534AB7" stroke-width="3"/>
+  <text x="84" y="304" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Bautizos</text>
+  <rect x="158" y="84" width="140" height="52" rx="6" fill="#0F6E56" stroke="#085041" stroke-width="0.5"/>
+  <text x="228" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="#E1F5EE" font-family="system-ui,sans-serif">SHOPPING BAGS</text>
+  <text x="228" y="120" text-anchor="middle" font-size="10" fill="#9FE1CB" font-family="monospace">/bolsas-compra ← 301</text>
+  <rect x="160" y="150" width="136" height="28" rx="3" fill="#fff" stroke="#0F6E56" stroke-width="1.5"/>
+  <line x1="160" y1="150" x2="160" y2="178" stroke="#0F6E56" stroke-width="3"/>
+  <text x="228" y="168" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Bolsas shopper</text>
+  <rect x="160" y="184" width="136" height="28" rx="3" fill="#fff" stroke="#0F6E56" stroke-width="0.5"/>
+  <line x1="160" y1="184" x2="160" y2="212" stroke="#0F6E56" stroke-width="3"/>
+  <text x="228" y="202" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Bolsas de yute</text>
+  <rect x="306" y="84" width="140" height="52" rx="6" fill="#185FA5" stroke="#0C447C" stroke-width="0.5"/>
+  <text x="376" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#E6F1FB" font-family="system-ui,sans-serif">SACOS Y</text>
+  <text x="376" y="117" text-anchor="middle" font-size="12" font-weight="700" fill="#E6F1FB" font-family="system-ui,sans-serif">ACCESORIOS</text>
+  <rect x="308" y="150" width="136" height="28" rx="3" fill="#fff" stroke="#185FA5" stroke-width="1.5"/>
+  <line x1="308" y1="150" x2="308" y2="178" stroke="#185FA5" stroke-width="3"/>
+  <text x="376" y="168" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Sacos de tela</text>
+  <rect x="308" y="184" width="136" height="28" rx="3" fill="#fff" stroke="#185FA5" stroke-width="0.5"/>
+  <line x1="308" y1="184" x2="308" y2="212" stroke="#185FA5" stroke-width="3"/>
+  <text x="376" y="202" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Mochilas cuerdas ← 301</text>
+  <rect x="308" y="218" width="136" height="28" rx="3" fill="#fff" stroke="#185FA5" stroke-width="0.5"/>
+  <line x1="308" y1="218" x2="308" y2="246" stroke="#185FA5" stroke-width="3"/>
+  <text x="376" y="236" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Neceser</text>
+  <rect x="308" y="252" width="136" height="28" rx="3" fill="#fff" stroke="#185FA5" stroke-width="0.5"/>
+  <line x1="308" y1="252" x2="308" y2="280" stroke="#185FA5" stroke-width="3"/>
+  <text x="376" y="270" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Saquitos de tela</text>
+  <rect x="454" y="84" width="140" height="52" rx="6" fill="#993C1D" stroke="#712B13" stroke-width="0.5"/>
+  <text x="524" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#FAECE7" font-family="system-ui,sans-serif">ROPA</text>
+  <text x="524" y="117" text-anchor="middle" font-size="12" font-weight="700" fill="#FAECE7" font-family="system-ui,sans-serif">PERSONALIZADA</text>
+  <rect x="456" y="150" width="136" height="28" rx="3" fill="#fff" stroke="#993C1D" stroke-width="1.5"/>
+  <line x1="456" y1="150" x2="456" y2="178" stroke="#993C1D" stroke-width="3"/>
+  <text x="524" y="168" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Camisetas</text>
+  <rect x="456" y="184" width="136" height="28" rx="3" fill="#fff" stroke="#993C1D" stroke-width="0.5"/>
+  <line x1="456" y1="184" x2="456" y2="212" stroke="#993C1D" stroke-width="3"/>
+  <text x="524" y="202" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Camisetas niños</text>
+  <rect x="456" y="218" width="136" height="28" rx="3" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1" stroke-dasharray="5 3"/>
+  <line x1="456" y1="218" x2="456" y2="246" stroke="#D3D1C7" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="517" y="234" text-anchor="middle" font-size="10" fill="#888780" font-family="system-ui,sans-serif">Camisetas hombre</text>
+  <text x="582" y="229" font-size="8.5" fill="#888780" font-family="system-ui,sans-serif">noindex</text>
+  <rect x="456" y="252" width="136" height="28" rx="3" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1" stroke-dasharray="5 3"/>
+  <line x1="456" y1="252" x2="456" y2="280" stroke="#D3D1C7" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="517" y="268" text-anchor="middle" font-size="10" fill="#888780" font-family="system-ui,sans-serif">Camisetas mujer</text>
+  <text x="582" y="263" font-size="8.5" fill="#888780" font-family="system-ui,sans-serif">noindex</text>
+  <rect x="456" y="286" width="136" height="28" rx="3" fill="#fff" stroke="#993C1D" stroke-width="0.5"/>
+  <line x1="456" y1="286" x2="456" y2="314" stroke="#993C1D" stroke-width="3"/>
+  <text x="524" y="304" text-anchor="middle" font-size="10.5" fill="#2c2c2a" font-family="system-ui,sans-serif">Gorras</text>
+  <rect x="602" y="84" width="140" height="52" rx="6" fill="#854F0B" stroke="#633806" stroke-width="0.5"/>
+  <text x="672" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#FAEEDA" font-family="system-ui,sans-serif">MERCHANDISING</text>
+  <text x="672" y="117" text-anchor="middle" font-size="12" font-weight="700" fill="#FAEEDA" font-family="system-ui,sans-serif">PERSONALIZADO</text>
+  <rect x="604" y="150" width="136" height="28" rx="3" fill="#FDF4E7" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="672" y="168" text-anchor="middle" font-size="10" fill="#854F0B" font-family="system-ui,sans-serif">⚠ Confirmar productos</text>
+  <rect x="750" y="84" width="140" height="52" rx="6" fill="#3B6D11" stroke="#27500A" stroke-width="0.5"/>
+  <text x="820" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#EAF3DE" font-family="system-ui,sans-serif">FABRICACIÓN</text>
+  <text x="820" y="117" text-anchor="middle" font-size="12" font-weight="700" fill="#EAF3DE" font-family="system-ui,sans-serif">EUROPEA</text>
+  <rect x="752" y="150" width="136" height="28" rx="3" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="820" y="168" text-anchor="middle" font-size="10" fill="#3B6D11" font-family="system-ui,sans-serif">→ Landing E-E-A-T</text>
+  <line x1="10" y1="332" x2="890" y2="332" stroke="#E8E6E0" stroke-width="1"/>
+  <text x="10" y="348" font-size="11" font-weight="700" fill="#D85A30" font-family="system-ui,sans-serif">LANDING PAGES B2B (standalone — no son hijos de ninguna categoría)</text>
+  <rect x="10" y="356" width="200" height="36" rx="5" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+  <text x="110" y="372" text-anchor="middle" font-size="11" font-weight="700" fill="#993C1D" font-family="system-ui,sans-serif">Mayorista tote bag</text>
+  <text x="110" y="384" text-anchor="middle" font-size="9.5" fill="#993C1D" font-family="monospace">/mayorista-tote-bag ✓ existe</text>
+  <rect x="225" y="356" width="200" height="36" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="325" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#3C3489" font-family="system-ui,sans-serif">Tote bags para empresas</text>
+  <text x="325" y="384" text-anchor="middle" font-size="9.5" fill="#534AB7" font-family="monospace">/tote-bag-para-empresas — NUEVA</text>
+  <rect x="440" y="356" width="200" height="36" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="540" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#3C3489" font-family="system-ui,sans-serif">Bolsas al por mayor</text>
+  <text x="540" y="384" text-anchor="middle" font-size="9.5" fill="#534AB7" font-family="monospace">/bolsas-pers-al-por-mayor — NUEVA</text>
+  <rect x="655" y="356" width="200" height="36" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="755" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#3C3489" font-family="system-ui,sans-serif">Bolsas para eventos</text>
+  <text x="755" y="384" text-anchor="middle" font-size="9.5" fill="#534AB7" font-family="monospace">/bolsas-pers-eventos — NUEVA</text>
+  <rect x="10" y="406" width="12" height="12" rx="2" fill="#534AB7"/>
+  <text x="28" y="417" font-size="10.5" fill="#444441" font-family="system-ui,sans-serif">PLP indexada</text>
+  <rect x="120" y="406" width="12" height="12" rx="2" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="138" y="417" font-size="10.5" fill="#444441" font-family="system-ui,sans-serif">Filtro noindex</text>
+  <rect x="240" y="406" width="12" height="12" rx="2" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="258" y="417" font-size="10.5" fill="#444441" font-family="system-ui,sans-serif">Página nueva por crear</text>
+  <rect x="410" y="406" width="12" height="12" rx="2" fill="#FDF4E7" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="428" y="417" font-size="10.5" fill="#444441" font-family="system-ui,sans-serif">Acción pendiente en CMS</text>
+  <text x="600" y="417" font-size="10.5" fill="#888780" font-family="system-ui,sans-serif">⚠ = requiere atención  |  ← 301 = redirect activo</text>
+</svg>
+<hr>
+
+<h2>3. Inventario completo de PLPs</h2>
+<table>
+  <thead><tr><th>#</th><th>Nombre</th><th>URL final</th><th>KW principal</th><th>Vol.</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td colspan="6" style="background:#EEEDFE;font-weight:700;color:#534AB7;font-size:11px">TOTEBAGS</td></tr>
+    <tr><td>1</td><td>Hub Bolsas de tela</td><td class="url">/categoria-producto/bolsas-personalizadas</td><td>bolsas de tela personalizadas</td><td class="vol-hi">2.400</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>2</td><td>Bolsas de algodón</td><td class="url">/categoria-producto/bolsas-algodon</td><td>bolsas de algodón personalizadas</td><td class="vol-hi">1.300</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>3</td><td>Bolsas bio/ecológicas</td><td class="url">/categoria-producto/bolsas-algodon-ecologico</td><td>bolsas de tela ecológicas pers.</td><td class="vol-low">260</td><td><span class="badge warn">⚠ 1 producto</span></td></tr>
+    <tr><td>4</td><td><s>Algodón biológico</s> (DUPLICADO)</td><td class="url"><s>/bolsas-personalizadas-algodon-biologico</s> → 301 → /bolsas-algodon-ecologico</td><td>—</td><td>—</td><td><span class="badge crit">🚨 eliminar</span></td></tr>
+    <tr><td>5</td><td>Bolsas para comuniones</td><td class="url">/categoria-producto/bolsas-comuniones</td><td>bolsas personalizadas comuniones</td><td class="vol-mid">590</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>6</td><td>Bolsas para bodas</td><td class="url">/categoria-producto/bolsas-bodas</td><td>bolsas personalizadas bodas</td><td class="vol-mid">390</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>7</td><td>Bolsas para bautizos</td><td class="url">/categoria-producto/bolsas-bautizos</td><td>bolsas personalizadas bautizo</td><td class="vol-low">210</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td colspan="6" style="background:#E1F5EE;font-weight:700;color:#0F6E56;font-size:11px">SHOPPING BAGS</td></tr>
+    <tr><td>8</td><td>Hub Bolsas de la compra</td><td class="url">/categoria-producto/bolsas-compra (← 301 de /bolsos)</td><td>bolsa de la compra personalizada</td><td class="vol-mid">480</td><td><span class="badge redirect">🔄 migrate URL</span></td></tr>
+    <tr><td>9</td><td>Bolsas de yute</td><td class="url">/categoria-producto/bolsos-yute</td><td>bolsas de yute personalizadas</td><td class="vol-mid">390</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td colspan="6" style="background:#E6F1FB;font-weight:700;color:#185FA5;font-size:11px">SACOS Y ACCESORIOS</td></tr>
+    <tr><td>10</td><td>Hub Sacos de tela</td><td class="url">/categoria-producto/sacos-tela-personalizados</td><td>sacos de tela personalizados</td><td class="vol-mid">590</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>11</td><td>Mochilas cuerdas</td><td class="url">/categoria-producto/mochilas-cuerdas-personalizadas (← 301)</td><td>mochilas cuerdas personalizadas</td><td class="vol-mid">390</td><td><span class="badge redirect">🔄 migrate URL</span></td></tr>
+    <tr><td>12</td><td>Neceser personalizado</td><td class="url">/categoria-producto/neceser-personalizado</td><td>neceser personalizado</td><td class="vol-mid">880</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>13</td><td>Saquitos de tela</td><td class="url">/categoria-producto/saquitos-tela</td><td>saquitos de tela personalizados</td><td class="vol-low">210</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td colspan="6" style="background:#FAECE7;font-weight:700;color:#993C1D;font-size:11px">ROPA PERSONALIZADA</td></tr>
+    <tr><td>14</td><td>Hub Ropa personalizada</td><td class="url">/categoria-producto/ropa-personalizada (← 301 de /textiles)</td><td>ropa personalizada para empresas</td><td class="vol-mid">590</td><td><span class="badge redirect">🔄 migrate URL</span></td></tr>
+    <tr><td>15</td><td>Camisetas personalizadas</td><td class="url">/categoria-producto/camisetas-personalizadas</td><td>camisetas personalizadas</td><td class="vol-hi">12.100</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>16</td><td>Camisetas para niños</td><td class="url">/categoria-producto/camisetas-personalizadas-ninos</td><td>camisetas personalizadas niños</td><td>480</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td>17</td><td>Camisetas hombre (FILTRO)</td><td class="url">/categoria-producto/camisetas-personalizadas-hombre</td><td>camisetas personalizadas hombre</td><td>1.000</td><td><span class="badge noindex">noindex — filtro</span></td></tr>
+    <tr><td>18</td><td>Camisetas mujer (FILTRO)</td><td class="url">/categoria-producto/camisetas-personalizadas-mujer</td><td>camisetas personalizadas mujer</td><td>720</td><td><span class="badge noindex">noindex — filtro</span></td></tr>
+    <tr><td>19</td><td>Gorras personalizadas</td><td class="url">/categoria-producto/gorras-personalizadas</td><td>gorras personalizadas</td><td class="vol-hi">1.900</td><td><span class="badge ok">index ✓</span></td></tr>
+    <tr><td colspan="6" style="background:#FAEEDA;font-weight:700;color:#854F0B;font-size:11px">MERCHANDISING PERSONALIZADO</td></tr>
+    <tr><td>20</td><td>Hub Merchandising</td><td class="url">/categoria-producto/merchandising-personalizado (← 301 de /accesorios)</td><td>merchandising personalizado para empresas</td><td class="vol-hi">1.300</td><td><span class="badge warn">🔄 migrate + ⚠ thin</span></td></tr>
+    <tr><td colspan="6" style="background:#EAF3DE;font-weight:700;color:#3B6D11;font-size:11px">FABRICACIÓN EUROPEA</td></tr>
+    <tr><td>21</td><td>Fabricación europea → landing E-E-A-T</td><td class="url">/categoria-producto/fabricacion-europea</td><td>bolsas personalizadas fabricación europea</td><td class="vol-low">90</td><td><span class="badge warn">⚠ reformular</span></td></tr>
+    <tr><td colspan="6" style="background:#FAECE7;font-weight:700;color:#D85A30;font-size:11px">B2B LANDINGS</td></tr>
+    <tr><td>22</td><td>Mayorista tote bag</td><td class="url">/mayorista-tote-bag</td><td>tote bag al por mayor</td><td class="vol-mid">320</td><td><span class="badge ok">index ✓ existe</span></td></tr>
+    <tr><td>23</td><td>Tote bags para empresas</td><td class="url">/tote-bag-para-empresas</td><td>tote bag para empresas</td><td class="vol-mid">480</td><td><span class="badge newpage">✚ nueva</span></td></tr>
+    <tr><td>24</td><td>Bolsas al por mayor</td><td class="url">/bolsas-personalizadas-al-por-mayor</td><td>bolsas personalizadas al por mayor</td><td class="vol-mid">390</td><td><span class="badge newpage">✚ nueva</span></td></tr>
+    <tr><td>25</td><td>Bolsas para eventos</td><td class="url">/bolsas-personalizadas-eventos</td><td>bolsas personalizadas para eventos</td><td class="vol-low">260</td><td><span class="badge newpage">✚ nueva</span></td></tr>
+  </tbody>
+</table>
+<hr>
+
+<h2>4. Inventario completo de PDPs</h2>
+<h3 style="color:#534AB7">Bolsas de tela — 11 PDPs | prefijo: /bolsas-personalizadas/[slug]</h3>
+<div class="pdp-grid">
+  <div class="pdp-card"><span class="name">Clásica</span><span class="slug">bolsa-clasica</span><span class="gram">140 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Asas de colores</span><span class="slug">bolsa-asas-de-colores</span><span class="gram">140 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Con 3 fuelles</span><span class="slug">bolsa-de-algodon-de-tela-con-3-fuelles-140-gm²</span><span class="gram">140 g/m² — slug largo, revisar</span></div>
+  <div class="pdp-card"><span class="name">Maxi</span><span class="slug">bolsa-maxi</span><span class="gram">140 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Premium</span><span class="slug">bolsa-premium</span><span class="gram">220 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Superior</span><span class="slug">bolsa-superior</span><span class="gram">280 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Clásica Bio ★</span><span class="slug">bolsa-clasica-bio</span><span class="gram">140 g/m² GOTS — único producto /bio</span></div>
+  <div class="pdp-card"><span class="name">Bandolera</span><span class="slug">bolsa-clasica-bandolera</span><span class="gram">140 g/m²</span></div>
+  <div class="pdp-card"><span class="name">De malla (red)</span><span class="slug">bolsa-de-malla</span><span class="gram">Algodón red</span></div>
+  <div class="pdp-card"><span class="name">Mini</span><span class="slug">bolsa-mini</span><span class="gram">140 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Clásica asa corta</span><span class="slug">bolsa-clasica-de-asa-corta</span><span class="gram">140 g/m²</span></div>
+</div>
+<h3 style="color:#0F6E56">Shopping Bags — 12 PDPs | prefijo: /bolsos/[slug] → /bolsas-compra/[slug]</h3>
+<div class="pdp-grid">
+  <div class="pdp-card"><span class="name">Luisa</span><span class="slug">bolso-luisa → bolsa-luisa</span><span class="gram">220 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Lola</span><span class="slug">bolso-lola → bolsa-lola</span><span class="gram">280 g/m²</span></div>
+  <div class="pdp-card"><span class="name">María</span><span class="slug">bolso-maria → bolsa-maria</span><span class="gram">340 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Jade</span><span class="slug">bolso-jade → bolsa-jade</span><span class="gram">300 g</span></div>
+  <div class="pdp-card"><span class="name">Clara</span><span class="slug">bolso-clara → bolsa-clara</span><span class="gram">220 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Luna</span><span class="slug">bolso-luna → bolsa-luna</span><span class="gram">280 g/m²</span></div>
+  <div class="pdp-card"><span class="name">June</span><span class="slug">bolso-june → bolsa-june</span><span class="gram">320 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Chloe</span><span class="slug">bolso-chloe → bolsa-chloe</span><span class="gram">280 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Eva</span><span class="slug">bolso-eva → bolsa-eva</span><span class="gram">170 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Emma</span><span class="slug">bolso-emma → bolsa-emma</span><span class="gram">220 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Nina</span><span class="slug">bolso-nina → bolsa-nina</span><span class="gram">170 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Hada (Royal Bio)</span><span class="slug">bolso-hada → bolsa-hada</span><span class="gram">340 g/m² BIO</span></div>
+</div>
+<h3 style="color:#0F6E56">Bolsas de yute — 9 PDPs | prefijo: /bolsos-yute/[slug]</h3>
+<div class="pdp-grid">
+  <div class="pdp-card"><span class="name">Alexa</span><span class="slug">bolso-yute-alexa</span><span class="gram">407 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Zoe</span><span class="slug">bolso-yute-zoe</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Anna</span><span class="slug">bolso-yute-anna</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Juliette</span><span class="slug">bolso-yute-juliette</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Lena</span><span class="slug">bolso-yute-lena</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Carlota</span><span class="slug">bolso-yute-carlota</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Lucy</span><span class="slug">bolso-yute-lucy</span><span class="gram">340 g/m²</span></div>
+  <div class="pdp-card"><span class="name">Alice</span><span class="slug">bolso-yute-alice</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Mia</span><span class="slug">bolso-yute-mia</span><span class="gram">—</span></div>
+</div>
+<h3 style="color:#185FA5">Sacos, mochilas, neceser, saquitos — verificar en CMS</h3>
+<div class="pdp-grid">
+  <div class="pdp-card"><span class="name">Mochila 2 cuerdas ✓</span><span class="slug">mochila-tela-2-cuerdas</span><span class="gram">140 g/m² — 1 PDP confirmado</span></div>
+  <div class="pdp-card unknown"><span class="name">Sacos de tela</span><span class="slug">verificar en CMS</span><span class="gram">varios modelos S/M/L</span></div>
+  <div class="pdp-card unknown"><span class="name">Neceser(es)</span><span class="slug">verificar en CMS</span><span class="gram">¿cuántos modelos?</span></div>
+  <div class="pdp-card unknown"><span class="name">Saquitos</span><span class="slug">verificar en CMS</span><span class="gram">¿cuántos modelos?</span></div>
+</div>
+<h3 style="color:#993C1D">Camisetas — 11 PDPs | prefijo: /camisetas-personalizadas/[slug]</h3>
+<div class="pdp-grid">
+  <div class="pdp-card"><span class="name">Hombre Clásica</span><span class="slug">camiseta-hombre-clasica-cuello-redondo</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Mujer Clásica</span><span class="slug">camiseta-mujer-clasica-cuello-redondo</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Niño Clásica</span><span class="slug">camiseta-nino-clasica-cuello-redondo</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Mujer Cuello V</span><span class="slug">camiseta-mujer-clasica-cuello-v</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Hombre Superior Premium</span><span class="slug">camiseta-hombre-superior-premium</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Mujer Superior Premium</span><span class="slug">camiseta-mujer-superior-premium</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Hombre Bio</span><span class="slug">camiseta-hombre-bio</span><span class="gram">Orgánico</span></div>
+  <div class="pdp-card"><span class="name">Mujer Bio</span><span class="slug">camiseta-mujer-bio</span><span class="gram">Orgánico</span></div>
+  <div class="pdp-card"><span class="name">Hombre Tirantes</span><span class="slug">camiseta-hombre-tirantes</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Mujer Tirantes</span><span class="slug">camiseta-mujer-tirantes</span><span class="gram">—</span></div>
+  <div class="pdp-card"><span class="name">Bicolor ML</span><span class="slug">camiseta-bicolor-cuello-redondo-ml</span><span class="gram">—</span></div>
+</div>
+<h3 style="color:#854F0B">Gorras — PDPs con URL antigua 🚨 | prefijo actual: /comprar-producto/accesorios/[slug]/</h3>
+<div class="pdp-grid">
+  <div class="pdp-card old"><span class="name">Gorra 5 Paneles ⚠</span><span class="slug">/comprar-producto/accesorios/gorra-5-paneles/ — URL ANTIGUA</span><span class="gram">100% algodón</span></div>
+  <div class="pdp-card old"><span class="name">Gorra de Malla ⚠</span><span class="slug">/comprar-producto/accesorios/gorra-de-malla-panel-frontal/ — URL ANTIGUA</span><span class="gram">100% poliéster</span></div>
+  <div class="pdp-card unknown"><span class="name">Gorra Trucker</span><span class="slug">verificar en CMS — mencionada en blog</span><span class="gram">—</span></div>
+</div>
+<hr>
+
+<h2>5. Keyword research completo</h2>
+<table>
+  <thead><tr><th>PLP</th><th>KW principal</th><th>Vol.</th><th>KW secundaria 1</th><th>Vol.</th><th>KW secundaria 2</th><th>Vol.</th></tr></thead>
+  <tbody>
+    <tr><td colspan="7" style="background:#EEEDFE;font-size:11px;font-weight:700;color:#534AB7">TOTEBAGS</td></tr>
+    <tr><td>/bolsas-personalizadas</td><td>bolsas de tela personalizadas</td><td class="vol-hi">2.400</td><td>bolsas personalizadas para empresas</td><td>1.600</td><td>tote bag con logo empresa</td><td>320</td></tr>
+    <tr><td>/bolsas-algodon</td><td>bolsas de algodón personalizadas</td><td class="vol-hi">1.300</td><td>bolsas algodón con logo</td><td>480</td><td>bolsa tela algodón personalizada</td><td>260</td></tr>
+    <tr><td>/bolsas-algodon-ecologico</td><td>bolsas de tela ecológicas pers.</td><td class="vol-low">260</td><td>bolsas orgánicas personalizadas</td><td>140</td><td>bolsas algodón GOTS personalizadas</td><td>90</td></tr>
+    <tr><td>/bolsas-comuniones</td><td>bolsas personalizadas comuniones</td><td class="vol-mid">590</td><td>bolsas de tela comuniones</td><td>320</td><td>detalles comunión bolsas tela</td><td>170</td></tr>
+    <tr><td>/bolsas-bodas</td><td>bolsas personalizadas bodas</td><td class="vol-mid">390</td><td>bolsas de tela bodas</td><td>210</td><td>regalos invitados boda bolsas</td><td>140</td></tr>
+    <tr><td>/bolsas-bautizos</td><td>bolsas personalizadas bautizo</td><td class="vol-low">210</td><td>bolsas tela bautizo</td><td>140</td><td>detalles bautizo personalizados</td><td>90</td></tr>
+    <tr><td colspan="7" style="background:#E1F5EE;font-size:11px;font-weight:700;color:#0F6E56">SHOPPING BAGS</td></tr>
+    <tr><td>/bolsas-compra</td><td>bolsa de la compra personalizada</td><td class="vol-mid">480</td><td>bolsas shopper personalizadas</td><td>260</td><td>bolsa mano personalizada empresa</td><td>170</td></tr>
+    <tr><td>/bolsos-yute</td><td>bolsas de yute personalizadas</td><td class="vol-mid">390</td><td>bolsas yute con logo empresa</td><td>170</td><td>bolsas arpillera personalizadas</td><td>90</td></tr>
+    <tr><td colspan="7" style="background:#E6F1FB;font-size:11px;font-weight:700;color:#185FA5">SACOS Y ACCESORIOS</td></tr>
+    <tr><td>/sacos-tela-personalizados</td><td>sacos de tela personalizados</td><td class="vol-mid">590</td><td>sacos con cordón personalizados</td><td>320</td><td>bolsas saco personalizadas empresa</td><td>170</td></tr>
+    <tr><td>/mochilas-cuerdas-personalizadas</td><td>mochilas cuerdas personalizadas</td><td class="vol-mid">390</td><td>mochila de cuerdas con logo</td><td>170</td><td>mochilas drawstring personalizadas</td><td>90</td></tr>
+    <tr><td>/neceser-personalizado</td><td>neceser personalizado</td><td class="vol-mid">880</td><td>neceser personalizado con logo</td><td>390</td><td>neceser tela personalizado empresa</td><td>170</td></tr>
+    <tr><td>/saquitos-tela</td><td>saquitos de tela personalizados</td><td class="vol-low">210</td><td>saquitos tela cordón personalizados</td><td>140</td><td>bolsitas tela regalos</td><td>90</td></tr>
+    <tr><td colspan="7" style="background:#FAECE7;font-size:11px;font-weight:700;color:#993C1D">ROPA PERSONALIZADA</td></tr>
+    <tr><td>/ropa-personalizada (hub)</td><td>ropa personalizada para empresas</td><td class="vol-mid">590</td><td>textil publicitario personalizado</td><td>390</td><td>ropa corporativa personalizada</td><td>260</td></tr>
+    <tr><td>/camisetas-personalizadas</td><td>camisetas personalizadas</td><td class="vol-hi">12.100</td><td>camisetas con logo empresa</td><td>1.300</td><td>camisetas estampadas personalizadas</td><td>880</td></tr>
+    <tr><td>/camisetas-personalizadas-ninos</td><td>camisetas personalizadas niños</td><td>480</td><td>camisetas infantiles personalizadas</td><td>260</td><td>camisetas niños logo evento</td><td>90</td></tr>
+    <tr><td>/gorras-personalizadas</td><td>gorras personalizadas</td><td class="vol-hi">1.900</td><td>gorras con logo empresa</td><td>720</td><td>gorras promocionales personalizadas</td><td>390</td></tr>
+    <tr><td colspan="7" style="background:#FAEEDA;font-size:11px;font-weight:700;color:#854F0B">MERCHANDISING</td></tr>
+    <tr><td>/merchandising-personalizado</td><td>merchandising personalizado para empresas</td><td class="vol-hi">1.300</td><td>artículos promocionales personalizados</td><td>720</td><td>regalos de empresa personalizados</td><td>590</td></tr>
+    <tr><td colspan="7" style="background:#FAECE7;font-size:11px;font-weight:700;color:#D85A30">B2B LANDINGS</td></tr>
+    <tr><td>/mayorista-tote-bag</td><td>tote bag al por mayor</td><td class="vol-mid">320</td><td>mayorista totebags</td><td>170</td><td>bolsas de tela al por mayor</td><td>140</td></tr>
+    <tr><td>/tote-bag-para-empresas (NUEVA)</td><td>tote bag para empresas</td><td class="vol-mid">480</td><td>bolsas personalizadas corporativas</td><td>320</td><td>merchandising bolsas empresa</td><td>170</td></tr>
+    <tr><td>/bolsas-personalizadas-al-por-mayor (NUEVA)</td><td>bolsas personalizadas al por mayor</td><td class="vol-mid">390</td><td>comprar bolsas al por mayor</td><td>210</td><td>bolsas tela precio mayorista</td><td>140</td></tr>
+    <tr><td>/bolsas-personalizadas-eventos (NUEVA)</td><td>bolsas personalizadas para eventos</td><td class="vol-low">260</td><td>tote bags para eventos empresa</td><td>140</td><td>bolsas tela eventos corporativos</td><td>90</td></tr>
+  </tbody>
+</table>
+<hr>
+
+<h2>6. Timeline — quién hace qué y qué desbloquea cada paso</h2>
+<svg viewBox="0 0 900 350" style="max-width:900px">
+  <rect x="0" y="0" width="900" height="30" fill="#F1EFE8"/>
+  <rect x="1" y="0" width="104" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="53" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">Inicio</text>
+  <rect x="107" y="0" width="88" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="151" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">Setup</text>
+  <rect x="197" y="0" width="168" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="281" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">CMS + Contenido</text>
+  <rect x="367" y="0" width="128" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="431" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">Técnico</text>
+  <rect x="497" y="0" width="124" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="559" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">Build + QA</text>
+  <rect x="623" y="0" width="108" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="677" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">Producción</text>
+  <rect x="733" y="0" width="167" height="30" rx="0" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="816" y="19" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5F5E5A" font-family="system-ui,sans-serif">Post-lanzamiento</text>
+  <rect x="0" y="32" width="900" height="140" fill="#EEEDFE" fill-opacity="0.3"/>
+  <rect x="0" y="174" width="900" height="2" fill="#D3D1C7"/>
+  <rect x="0" y="178" width="900" height="162" fill="#E1F5EE" fill-opacity="0.3"/>
+  <text x="4" y="108" font-size="11" font-weight="700" fill="#534AB7" font-family="system-ui,sans-serif" transform="rotate(-90, 4, 108)" text-anchor="middle">SEO</text>
+  <rect x="0" y="32" width="5" height="140" fill="#534AB7"/>
+  <text x="4" y="260" font-size="11" font-weight="700" fill="#0F6E56" font-family="system-ui,sans-serif" transform="rotate(-90, 4, 260)" text-anchor="middle">WEB</text>
+  <rect x="0" y="178" width="5" height="162" fill="#0F6E56"/>
+  <rect x="0" y="340" width="900" height="1" fill="#D3D1C7"/>
+  <defs><marker id="arrt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+  <rect x="8" y="52" width="94" height="38" rx="5" fill="#534AB7"/>
+  <text x="55" y="67" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Aprobar</text>
+  <text x="55" y="81" text-anchor="middle" font-size="9.5" fill="#AFA9EC" font-family="system-ui,sans-serif">arquitectura final</text>
+  <path d="M 102 71 Q 113 71 113 185" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrt)"/>
+  <text x="108" y="130" font-size="9" fill="#534AB7" font-family="system-ui,sans-serif" transform="rotate(-90,108,130)" text-anchor="middle">desbloquea</text>
+  <rect x="200" y="52" width="160" height="38" rx="5" fill="#534AB7"/>
+  <text x="280" y="67" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Redactar copy</text>
+  <text x="280" y="81" text-anchor="middle" font-size="9.5" fill="#AFA9EC" font-family="system-ui,sans-serif">landings B2B + páginas hub</text>
+  <rect x="500" y="52" width="118" height="38" rx="5" fill="#534AB7"/>
+  <text x="559" y="67" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Crawl staging</text>
+  <text x="559" y="81" text-anchor="middle" font-size="9.5" fill="#AFA9EC" font-family="system-ui,sans-serif">Verificar 301s, titles</text>
+  <rect x="626" y="52" width="102" height="38" rx="5" fill="#534AB7"/>
+  <text x="677" y="67" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Dar OK</text>
+  <text x="677" y="81" text-anchor="middle" font-size="9.5" fill="#AFA9EC" font-family="system-ui,sans-serif">para producción</text>
+  <path d="M 728 71 Q 739 71 739 195" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrt)"/>
+  <rect x="736" y="36" width="157" height="28" rx="4" fill="#534AB7"/>
+  <text x="814" y="54" text-anchor="middle" font-size="10" fill="#fff" font-family="system-ui,sans-serif">GSC: enviar sitemap</text>
+  <rect x="736" y="70" width="157" height="28" rx="4" fill="#7F77DD"/>
+  <text x="814" y="88" text-anchor="middle" font-size="10" fill="#EEEDFE" font-family="system-ui,sans-serif">Monitorizar 404s (sem 1)</text>
+  <rect x="736" y="104" width="157" height="28" rx="4" fill="#7F77DD"/>
+  <text x="814" y="122" text-anchor="middle" font-size="10" fill="#EEEDFE" font-family="system-ui,sans-serif">Revisar posiciones (sem 4)</text>
+  <rect x="110" y="192" width="82" height="34" rx="5" fill="#0F6E56"/>
+  <text x="151" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#E1F5EE" font-family="system-ui,sans-serif">Preparar</text>
+  <text x="151" y="219" text-anchor="middle" font-size="9.5" fill="#9FE1CB" font-family="system-ui,sans-serif">staging</text>
+  <rect x="200" y="192" width="160" height="28" rx="4" fill="#0F6E56"/>
+  <text x="280" y="210" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">Corregir bug OG image</text>
+  <rect x="200" y="224" width="160" height="28" rx="4" fill="#0F6E56"/>
+  <text x="280" y="242" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">Cambiar 4 slugs en CMS</text>
+  <rect x="200" y="256" width="160" height="28" rx="4" fill="#1D9E75"/>
+  <text x="280" y="274" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">Migrar PDPs gorras</text>
+  <rect x="200" y="288" width="160" height="28" rx="4" fill="#1D9E75"/>
+  <text x="280" y="306" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">Añadir productos a /bio</text>
+  <rect x="370" y="192" width="122" height="28" rx="4" fill="#0F6E56"/>
+  <text x="431" y="210" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">.htaccess (8 redirects)</text>
+  <rect x="370" y="224" width="122" height="28" rx="4" fill="#0F6E56"/>
+  <text x="431" y="242" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">Actualizar menú</text>
+  <rect x="370" y="256" width="122" height="28" rx="4" fill="#1D9E75"/>
+  <text x="431" y="274" text-anchor="middle" font-size="9.5" fill="#E1F5EE" font-family="system-ui,sans-serif">Noindex camisetas h/m</text>
+  <rect x="500" y="192" width="118" height="38" rx="5" fill="#0F6E56"/>
+  <text x="559" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#E1F5EE" font-family="system-ui,sans-serif">Build Gatsby</text>
+  <text x="559" y="221" text-anchor="middle" font-size="9.5" fill="#9FE1CB" font-family="system-ui,sans-serif">en staging</text>
+  <path d="M 559 230 L 559 50" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrt)"/>
+  <rect x="626" y="192" width="102" height="38" rx="5" fill="#0F6E56"/>
+  <text x="677" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#E1F5EE" font-family="system-ui,sans-serif">Deploy</text>
+  <text x="677" y="221" text-anchor="middle" font-size="9.5" fill="#9FE1CB" font-family="system-ui,sans-serif">en producción</text>
+  <rect x="736" y="192" width="157" height="34" rx="5" fill="#1D9E75"/>
+  <text x="814" y="207" text-anchor="middle" font-size="10" fill="#E1F5EE" font-family="system-ui,sans-serif">Disponible</text>
+  <text x="814" y="219" text-anchor="middle" font-size="9.5" fill="#9FE1CB" font-family="system-ui,sans-serif">para fixes urgentes</text>
+  <text x="880" y="165" text-anchor="end" font-size="10" fill="#534AB7" font-family="system-ui,sans-serif" opacity="0.5">SEO / Consultora</text>
+  <text x="880" y="338" text-anchor="end" font-size="10" fill="#0F6E56" font-family="system-ui,sans-serif" opacity="0.5">Agencia Web / Dev</text>
+  <text x="450" y="172" text-anchor="middle" font-size="9.5" fill="#888780" font-family="system-ui,sans-serif">Las flechas de puntos indican dependencia: la tarea de destino no puede empezar hasta que la de origen esté completa</text>
+</svg>
+<hr>
+
+<h2>7. Acciones por prioridad</h2>
+<h3>Urgente — antes del siguiente despliegue</h3>
+<table>
+  <thead><tr><th>Acción</th><th>Qué pasa si no se hace</th><th>Quién</th></tr></thead>
+  <tbody>
+    <tr><td>Corregir OG image <code>localhost:8000</code></td><td>Cero visibilidad en redes sociales en cada URL compartida</td><td>Dev</td></tr>
+    <tr><td>301 redirect <code>/bolsas-personalizadas-algodon-biologico</code> → <code>/bolsas-algodon-ecologico</code></td><td>URL fantasma activa, gasta crawl budget, señal confusa para Google</td><td>Dev</td></tr>
+    <tr><td>Migrar PDPs de gorras a <code>/gorras-personalizadas/[slug]</code></td><td>Los únicos PDPs de gorras siguen en URL antigua, inconsistencia estructural</td><td>Dev + CMS</td></tr>
+    <tr><td>Verificar que los paths <code>/comprar-producto/</code> y <code>/comprar/</code> tienen 301 activos</td><td>Posibles 404 activos que destruyen link equity de backlinks existentes</td><td>Dev</td></tr>
+  </tbody>
+</table>
+<h3>Alta prioridad — antes o durante la migración de URLs</h3>
+<table>
+  <thead><tr><th>Acción</th><th>Por qué</th><th>Quién</th></tr></thead>
+  <tbody>
+    <tr><td>Añadir más productos a <code>/bolsas-algodon-ecologico</code></td><td>1 producto = thin content. Todos los productos GOTS deben estar aquí</td><td>Cliente + CMS</td></tr>
+    <tr><td>Diferenciar catálogos de <code>/bolsas-personalizadas</code> vs <code>/bolsas-algodon</code></td><td>Mismo set de 11 productos = contenido duplicado entre hub y subcategoría</td><td>CMS</td></tr>
+    <tr><td>Confirmar qué productos tiene <code>/merchandising-personalizado</code></td><td>Sin productos propios = thin content irreparable. El cliente debe confirmar el catálogo</td><td>Cliente</td></tr>
+    <tr><td>Verificar PDPs de sacos, neceser, saquitos y mochilas en CMS</td><td>Si mochilas solo tiene 1 PDP, también es thin content. Cuantificar para decidir</td><td>Cliente</td></tr>
+    <tr><td>Ejecutar los 4 redirects de categoría + cascada (.htaccess)</td><td>Ver documento de redirects anterior</td><td>Dev</td></tr>
+  </tbody>
+</table>
+<h3>Media prioridad — sprint siguiente a la migración</h3>
+<table>
+  <thead><tr><th>Acción</th><th>Impacto</th><th>Quién</th></tr></thead>
+  <tbody>
+    <tr><td>Crear 3 landings B2B nuevas (<code>/tote-bag-para-empresas</code>, <code>/bolsas-personalizadas-al-por-mayor</code>, <code>/bolsas-personalizadas-eventos</code>)</td><td>1.130 búsquedas/mes adicionales, altamente conversoras</td><td>SEO (copy) + Dev</td></tr>
+    <tr><td>Transformar <code>/fabricacion-europea</code> en landing de Calidad & Sostenibilidad con certificaciones OEKO-TEX/GOTS</td><td>Muy bajo vol. de KW directo (90/m) pero pilar para E-E-A-T del dominio</td><td>SEO (copy)</td></tr>
+    <tr><td>Reforzar <code>/mayorista-tote-bag</code> con cantidades mínimas, plazos, FAQs y formulario B2B</td><td>Mejora CRO directo en la única landing B2B ya existente</td><td>SEO (copy) + Dev</td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════════════════
+     PASSWORD GATE SCRIPT
+     Contraseña: totebag2026
+     Para cambiarla: reemplaza 'totebag2026' por la nueva contraseña.
+     ══════════════════════════════════════════════ -->
+<script>
+  (function(){
+    var PASS = 'totebag2026';
+    var KEY  = 'tdt_auth_26';
+    var gate = document.getElementById('gate');
+    var inp  = document.getElementById('gate-input');
+    var err  = document.getElementById('gate-err');
+
+    // Already authenticated this session?
+    if(sessionStorage.getItem(KEY) === '1'){ gate.style.display='none'; return; }
+
+    // Unlock function
+    window.gateCheck = function(){
+      if(inp.value === PASS){
+        sessionStorage.setItem(KEY,'1');
+        gate.style.opacity='0';
+        gate.style.transition='opacity 0.3s';
+        setTimeout(function(){ gate.style.display='none'; gate.style.opacity=''; }, 300);
+      } else {
+        err.style.display='block';
+        inp.classList.remove('shake');
+        void inp.offsetWidth; // reflow to restart animation
+        inp.classList.add('shake');
+        inp.value='';
+        inp.focus();
+      }
+    };
+
+    // Enter key
+    inp.addEventListener('keydown', function(e){
+      if(e.key==='Enter') window.gateCheck();
+    });
+  })();
+</script>
+</body>
+</html>
